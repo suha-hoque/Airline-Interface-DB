@@ -1,7 +1,7 @@
 
 ---
 
-## Project 2: Airline Interface (DB + Web App)
+## Project 2: Airline Interface
 
 ```markdown
 # Airline Interface Web Application
