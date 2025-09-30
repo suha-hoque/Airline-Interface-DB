@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Flights</title>
+</head>
+<body>
+    <h1>Customer Flights for {{ airline_name }}</h1>
+    <a href="/home">Staff Homepage</a>
+    <hr>
+
+    <h2>Most Frequent Customer:</h2>
+    {% if most_frequent_customer %}
+        <p><strong>Email:</strong> {{ most_frequent_customer['Email'] }}</p>
+        <p><strong>Name:</strong> {{ most_frequent_customer['First_Name'] }} {{ most_frequent_customer['Last_Name'] }}</p>
+    {% else %}
+        <p>No frequent customer in the last year.</p>
+    {% endif %}
+    <hr>
+
+    <h2>All customers and the flights they have taken</h2>
+    {% if customer_flights_data %}
+        {% for data in customer_flights_data %}
+            <h3>Customer: {{ data.customer['First_Name'] }} {{ data.customer['Last_Name'] }} ({{ data.customer['Email'] }})</h3>
+            {% if data.flights %}
+                <table border="1">
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure Date</th>
+                        <th>Arrival Date</th>
+                        <th>Departure Code</th>
+                        <th>Arrival Code</th>
+                    </tr>
+                    {% for flight in data.flights %}
+                    <tr>
+                        <td>{{ flight['Flight_Num'] }}</td>
+                        <td>{{ flight['Departure_Date'] }}</td>
+                        <td>{{ flight['Arrival_Date'] }}</td>
+                        <td>{{ flight['Departure_Code'] }}</td>
+                        <td>{{ flight['Arrival_Code'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No flights for this customer.</p>
+            {% endif %}
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>No customers found.</p>
+    {% endif %}
+</body>
+</html>

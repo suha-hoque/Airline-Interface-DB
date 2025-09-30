@@ -1,0 +1,177 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome to the Airline Portal</title>
+</head>
+<body>
+    <h1>Welcome to the Airline Portal</h1>
+
+    <div style="display: flex; gap: 2rem;">
+        <!-- The airline portal page, this allows users to log in or sign up as customers or staff, search for flights, and check flight statuses  -->
+        <div>
+            <h2>Customer</h2>
+            <p>Are you a customer? Sign up or log in to access your account.</p>
+            <a href="/login?role=customer">Customer Log In</a><br>
+            <a href="/register?role=customer">Customer Sign Up</a>
+        </div>
+
+        <!-- Airline Staff Section -->
+        <div>
+            <h2>Airline Staff</h2>
+            <p>Are you an airline staff member? Sign up or log in to access your staff portal.</p>
+            <a href="/login?role=staff">Staff Log In</a><br>
+            <a href="/register?role=staff">Staff Sign Up</a>
+        </div>
+    </div>
+
+    <hr>
+
+
+
+
+
+
+
+        <!-- Flight Search Section -->
+    <div>
+        <h2>Flight Search</h2>
+        <form action="/search_flights" method="POST">
+            <input type="hidden" name="target_page" value="index">
+            <label for="departure_code">Departure Airport Code:</label>
+            <input type="text" id="departure_code" name="departure_code" required><br><br>
+
+            <label for="arrival_code">Arrival Airport Code:</label>
+            <input type="text" id="arrival_code" name="arrival_code" required><br><br>
+
+            <label for="trip_type">Trip Type:</label>
+            <select id="trip_type" name="trip_type" required>
+                <option value="one-way">One Way</option>
+                <option value="round-trip">Round Trip</option>
+            </select><br><br>
+
+            <label for="departure_date">Departure Date:</label>
+            <input type="date" id="departure_date" name="departure_date" required><br><br>
+
+            <div id="return_date_section" style="display: none;">
+                <label for="return_date">Return Date:</label>
+                <input type="date" id="return_date" name="return_date"><br><br>
+            </div>
+
+            <button type="submit">Search Flights</button>
+        </form>
+
+        <!-- Flight Results Section -->
+<!-- Flight Results Section -->
+<!-- Flight Results Section -->
+        {% if flights or has_past_flights %}
+            {% if has_past_flights %}
+                <p style="color: red; font-weight: bold;">
+                    Note: This flight search will only display future flights, you entered a past flight!
+                </p>
+            {% endif %}
+            {% if flights %}
+                <h3>Search Results</h3>
+                <table border="1">
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure Date</th>
+                        <th>Departure Time</th>
+                        <th>Arrival Date</th>
+                        <th>Arrival Time</th>
+                        <th>Base Ticket Price</th>
+                        <th>Flight Status</th>
+                        <th>Airline Name</th>
+                        <th>Departure Code</th>
+                        <th>Arrival Code</th>
+                    </tr>
+                    {% for flight in flights %}
+                    <tr>
+                        <td>{{ flight['Flight_Num'] }}</td>
+                        <td>{{ flight['Departure_Date'] }}</td>
+                        <td>{{ flight['Departure_Time'] }}</td>
+                        <td>{{ flight['Arrival_Date'] }}</td>
+                        <td>{{ flight['Arrival_Time'] }}</td>
+                        <td>{{ flight['Base_Ticket_Price'] }}</td>
+                        <td>{{ flight['Flight_Status'] }}</td>
+                        <td>{{ flight['Airline_Name'] }}</td>
+                        <td>{{ flight['Departure_Code'] }}</td>
+                        <td>{{ flight['Arrival_Code'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>...</p>
+            {% endif %}
+        {% else %}
+            <p>No flights match your search criteria.</p>
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- Check Flight Status Section -->
+    <div>
+        <h2>Check Flight Status</h2>
+        <form action="/flight_status" method="POST">
+            <label for="airline_name">Airline Name:</label>
+            <input type="text" id="airline_name" name="airline_name" required><br><br>
+
+            <label for="flight_num">Flight Number:</label>
+            <input type="text" id="flight_num" name="flight_num" required><br><br>
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" required><br><br>
+
+            <label for="date_type">Date Type:</label>
+            <select id="date_type" name="date_type" required>
+                <option value="departure">Departure</option>
+                <option value="arrival">Arrival</option>
+            </select><br><br>
+
+            <button type="submit">Check Status</button>
+        </form>
+    </div>
+
+    <!-- Flight Status Results Section -->
+    <h2>Flight Status Results</h2>
+    {% if flight_status_results %}
+        <table border="1">
+            <tr>
+                <th>Flight Number</th>
+                <th>Airline Name</th>
+                <th>Status</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Departure Code</th>
+                <th>Arrival Code</th>
+                <th>Date Type</th>
+            </tr>
+            {% for status in flight_status_results %}
+            <tr>
+                <td>{{ status['Flight_Num'] }}</td>
+                <td>{{ status['Airline_Name'] }}</td>
+                <td>{{ status['Flight_Status'] }}</td>
+                <td>{{ status['Date'] }}</td>
+                <td>{{ status['Time'] }}</td>
+                <td>{{ status['Departure_Code'] }}</td>
+                <td>{{ status['Arrival_Code'] }}</td>
+                <td>{{ status['Date_Type'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No flight status information available for the provided criteria.</p>
+    {% endif %}
+
+    <script>
+        // JavaScript to toggle return date field based on trip type selection
+        document.getElementById('trip_type').addEventListener('change', function () {
+            var returnDateSection = document.getElementById('return_date_section');
+            returnDateSection.style.display = this.value === 'round-trip' ? 'block' : 'none';
+        });
+    </script>
+</body>
+</html>

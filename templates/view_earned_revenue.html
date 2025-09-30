@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Earned Revenue</title>
+</head>
+<body>
+    <h1>View Earned Revenue for {{ airline_name }}</h1>
+    <a href="/home">Staff Homepage</a>
+    <hr>
+
+    <h2>Monthly and Yearly Revenue</h2>
+    <table border="1">
+        <tr>
+            <th>Time Period</th>
+            <th>Total Revenue</th>
+        </tr>
+        <tr>
+            <td>Last Month</td>
+            <td>${{ "{:,.2f}".format(revenue_last_month) }}</td>
+        </tr>
+        <tr>
+            <td>Last Year</td>
+            <td>${{ "{:,.2f}".format(revenue_last_year) }}</td>
+        </tr>
+    </table>
+</body>
+</html>

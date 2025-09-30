@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add a New Airplane</title>
+</head>
+<body>
+    <h1>Add a New Airplane for {{ airline_name }}</h1>
+    <a href="/home">Staff Homepage</a>
+    <hr>
+
+    <form method="POST">
+        <label for="airplane_id">Airplane ID:</label>
+        <input type="text" name="airplane_id" id="airplane_id" required><br>
+
+        <label for="num_seats">Number of Seats:</label>
+        <input type="number" name="num_seats" id="num_seats" required><br>
+
+        <label for="manufacturer">Manufacturer:</label>
+        <input type="text" name="manufacturer" id="manufacturer" required><br>
+
+        <label for="model_num">Model Number:</label>
+        <input type="text" name="model_num" id="model_num" required><br>
+
+        <label for="manufacture_date">Manufacturing Date:</label>
+        <input type="date" name="manufacture_date" id="manufacture_date" required><br>
+
+        <button type="submit">Add Airplane</button>
+    </form>
+</body>
+</html>

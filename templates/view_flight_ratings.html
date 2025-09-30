@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Flight Ratings</title>
+</head>
+<body>
+    <h1>View Flight Ratings for {{ airline_name }}</h1>
+    <a href="/home">Staff Homepage</a>
+    <hr>
+
+    {% if flights %}
+        <table border="1">
+            <tr>
+                <th>Flight Number</th>
+                <th>Departure Date</th>
+                <th>Departure Code</th>
+                <th>Average Rating</th>
+                <th>Customer Comments</th>
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight['Flight_Num'] }}</td>
+                <td>{{ flight['Departure_Date'] }}</td>
+                <td>{{ flight['Departure_Code'] }}</td>
+                <td>{{ "{:.2f}".format(flight['Avg_Rating']) if flight['Avg_Rating'] > 0 else "No Ratings Yet" }}</td>
+                <td>
+                    {% if flight['Comments'] %}
+                        <ul>
+                        {% for comment in flight['Comments'] %}
+                            <li>{{ comment['Email'] }}: Rating: {{ comment['Rating'] }}: Comment: {{ comment['Comment'] }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% else %}
+                        No comments yet
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No flights found.</p>
+    {% endif %}
+</body>
+</html>

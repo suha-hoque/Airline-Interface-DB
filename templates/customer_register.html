@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Customer Registration</title>
+</head>
+<body>
+    <h2>Customer Registration</h2>
+    <form action="/customer_registerAuth" method="POST">
+        <label for="email">Email:</label>
+        <input type="email" name="email" placeholder="Email" required /> <br>
+
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" placeholder="First Name" required /> <br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" placeholder="Last Name" required /> <br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" placeholder="Password" required /> <br>
+
+        <label for="building_num">Building Number:</label>
+        <input type="number" name="building_num" placeholder="Building Number" required /> <br>
+
+        <label for="street_name">Street Name:</label>
+        <input type="text" name="street_name" placeholder="Street Name" required /> <br>
+
+        <label for="apartment_num">Apartment Number:</label>
+        <input type="number" name="apartment_num" placeholder="Apartment Number" /> <br>
+
+        <label for="city">City:</label>
+        <input type="text" name="city" placeholder="City" required /> <br>
+
+        <label for="state">State:</label>
+        <input type="text" name="state" placeholder="State" required /> <br>
+
+        <label for="zip_code">Zip Code:</label>
+        <input type="text" name="zip_code" placeholder="Zip Code" required /> <br>
+
+        <label for="date_of_birth">Date of Birth:</label>
+        <input type="date" name="date_of_birth" required /> <br>
+
+        <input type="submit" value="Register" />
+        
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{error}}</p>
+        {% endif %}
+    </form>
+    <a href="/">Go back</a>
+</body>
+</html>

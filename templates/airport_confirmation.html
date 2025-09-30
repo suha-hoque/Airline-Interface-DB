@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Newly Added Airport Confirmation</title>
+</head>
+<body>
+    <h1>Airport Was Successfully Added</h1>
+    <a href="/home">Staff Homepage</a> | <a href="/logout">Logout</a>
+    
+    <hr>
+
+    <h2>Newly Added Airport</h2>
+    <table border="1">
+        <tr>
+            <th>Airport Code</th>
+            <td>{{ airport['Airport_Code'] }}</td>
+        </tr>
+        <tr>
+            <th>Airport Name</th>
+            <td>{{ airport['Airport_Name'] }}</td>
+        </tr>
+        <tr>
+            <th>City</th>
+            <td>{{ airport['City'] }}</td>
+        </tr>
+        <tr>
+            <th>Country</th>
+            <td>{{ airport['Country'] }}</td>
+        </tr>
+        <tr>
+            <th>Number of Terminals</th>
+            <td>{{ airport['Number_of_Terminals'] }}</td>
+        </tr>
+        <tr>
+            <th>Airport Type</th>
+            <td>{{ airport['Airport_Type'] }}</td>
+        </tr>
+    </table>
+</body>
+</html>

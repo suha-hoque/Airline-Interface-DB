@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Airplane Added Confirmation Page</title>
+</head>
+<body>
+    <h1>Airplanes Owned by {{ airline_name }}</h1>
+    <a href="/home">Staff Homepage</a>
+    <hr>
+    <p>Airplane Was Successfully Added</p>
+    {% if airplanes %}
+        <table border="1">
+            <tr>
+                <th>Airplane ID</th>
+                <th>Number of Seats</th>
+                <th>Manufacturer</th>
+                <th>Model Number</th>
+                <th>Manufacturing Date</th>
+                <th>Age</th>
+            </tr>
+            {% for airplane in airplanes %}
+            <tr>
+                <td>{{ airplane['Airplane_ID'] }}</td>
+                <td>{{ airplane['Number_of_Seats'] }}</td>
+                <td>{{ airplane['Manufacturing_Company'] }}</td>
+                <td>{{ airplane['Model_Num'] }}</td>
+                <td>{{ airplane['Manufacturing_Date'] }}</td>
+                <td>{{ airplane['Age'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No airplanes found.</p>
+    {% endif %}
+</body>
+</html>

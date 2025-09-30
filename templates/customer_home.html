@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Customer Home</title>
+        <style>
+            .spending-table {
+                width: 100%;
+                border-collapse: collapse;
+                margin: 20px 0;
+            }
+        
+            .spending-table th,
+            .spending-table td {
+                border: 1px solid #ddd;
+                padding: 12px;
+                text-align: center;
+            }
+        
+            .spending-table th {
+                background-color: #f5f5f5;
+                font-weight: bold;
+            }
+        
+            .spending-table tr:nth-child(even) {
+                background-color: #fafafa;
+            }
+        
+            .total-amount {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333;
+                margin: 10px 0;
+            }
+        
+            .spending-section {
+                margin: 20px 0;
+                padding: 20px;
+                background-color: white;
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+        
+            .form-group {
+                margin: 20px 0;
+            }
+        
+            .form-group input,
+            .form-group button {
+                margin: 0 10px;
+                padding: 8px;
+            }
+            
+        </style>
+    </head>
+<body>
+    <h1>Welcome, {{ first_name }}!</h1>
+    <a href="/logout">Logout</a>
+    <hr>
+
+    <!-- View My Flights Section -->
+    <h2>View My Flights</h2>
+    <a href="/view_flights?type=future">Future Flights</a> |
+    <a href="/view_flights?type=past">Past Flights</a>
+
+    <!-- Flight Tables - Only shown in View My Flights section -->
+    {% if query_type == 'future' and flights and not search_results %}
+        <h3>Future Flights</h3>
+        <table border="1">
+            <tr>
+                <th>Flight Number</th>
+                <th>Departure Airport</th>
+                <th>Arrival Airport</th>
+                <th>Departure Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Date</th>
+                <th>Arrival Time</th>
+                <th>Status</th>
+                <th>Ticket ID</th>
+                <th>Sold Price</th>
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight['Flight_Num'] }}</td>
+                <td>{{ flight['Departure_Code'] }}</td>
+                <td>{{ flight['Arrival_Code'] }}</td>
+                <td>{{ flight['Departure_Date'] }}</td>
+                <td>{{ flight['Departure_Time'] }}</td>
+                <td>{{ flight['Arrival_Date'] }}</td>
+                <td>{{ flight['Arrival_Time'] }}</td>
+                <td>{{ flight['Flight_Status'] }}</td>
+                <td>{{ flight['Ticket_ID'] }}</td>
+                <td>${{ '%.2f' | format(flight['Sold_Price']) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    {% if query_type == 'past' and flights and not search_results %}
+        <h3>Past Flights</h3>
+        <table border="1">
+            <tr>
+                <th>Flight Number</th>
+                <th>Departure Airport</th>
+                <th>Arrival Airport</th>
+                <th>Departure Date</th>
+                <th>Arrival Date</th>
+                <th>Status</th>
+                <th>Ticket ID</th>
+                <th>Sold Price</th>
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight['Flight_Num'] }}</td>
+                <td>{{ flight['Departure_Code'] }}</td>
+                <td>{{ flight['Arrival_Code'] }}</td>
+                <td>{{ flight['Departure_Date'] }}</td>
+                <td>{{ flight['Arrival_Date'] }}</td>
+                <td>{{ flight['Flight_Status'] }}</td>
+                <td>{{ flight['Ticket_ID'] }}</td>
+                <td>${{ '%.2f' | format(flight['Sold_Price']) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% endif %}
+
+    <!-- Flight Search Section -->
+    <div>
+        <h2>Flight Search</h2>
+        <form action="/search_flights" method="POST">
+            <input type="hidden" name="target_page" value="customer_home">
+            
+            <label for="departure_code">Departure Airport Code:</label>
+            <input type="text" id="departure_code" name="departure_code" required><br><br>
+
+            <label for="arrival_code">Arrival Airport Code:</label>
+            <input type="text" id="arrival_code" name="arrival_code" required><br><br>
+
+            <label for="trip_type">Trip Type:</label>
+            <select id="trip_type" name="trip_type" required>
+                <option value="one-way">One Way</option>
+                <option value="round-trip">Round Trip</option>
+            </select><br><br>
+
+            <label for="departure_date">Departure Date:</label>
+            <input type="date" id="departure_date" name="departure_date" required><br><br>
+
+            <div id="return_date_section" style="display: none;">
+                <label for="return_date">Return Date:</label>
+                <input type="date" id="return_date" name="return_date"><br><br>
+            </div>
+
+            <button type="submit">Search Flights</button>
+        </form>
+
+        <!-- Search Results Section -->
+        {% if search_results %}
+            {% if has_past_flights %}
+                <p style="color: red; font-weight: bold;">
+                    Note: This flight search will only display future flights, you entered a past flight!
+                </p>
+            {% endif %}
+            
+            {% if flights %}
+                <h3>Search Results</h3>
+                <table border="1">
+                    <tr>
+                        <th>Flight Number</th>
+                        <th>Departure Airport</th>
+                        <th>Arrival Airport</th>
+                        <th>Departure Date</th>
+                        <th>Departure Time</th>
+                        <th>Arrival Date</th>
+                        <th>Arrival Time</th>
+                        <th>Base Ticket Price</th>
+                        <th>Flight Status</th>
+                        <th>Airline Name</th>
+                    </tr>
+                    {% for flight in flights %}
+                        <tr>
+                            <td>{{ flight['Flight_Num'] }}</td>
+                            <td>{{ flight['Departure_Airport'] }} ({{ flight['Departure_Code'] }})</td>
+                            <td>{{ flight['Arrival_Airport'] }} ({{ flight['Arrival_Code'] }})</td>
+                            <td>{{ flight['Departure_Date'] }}</td>
+                            <td>{{ flight['Departure_Time'] }}</td>
+                            <td>{{ flight['Arrival_Date'] }}</td>
+                            <td>{{ flight['Arrival_Time'] }}</td>
+                            <td>{{ flight['Base_Ticket_Price'] }}</td>
+                            <td>{{ flight['Flight_Status'] }}</td>
+                            <td>{{ flight['Airline_Name'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <p>No flights match your search criteria.</p>
+            {% endif %}
+        {% endif %}
+    </div>
+
+   <hr>
+   <h2>Check Available Seats</h2>
+   <form id="seatCheckForm">
+       <label for="flight_num_check">Enter Flight Number:</label>
+       <input type="number" id="flight_num_check" name="flight_num_check" required>
+       <button type="button" onclick="checkSeats()">Check Available Seats</button>
+   </form>
+
+   <!-- Seats will be displayed here -->
+   <div id="seatsDisplay">
+       <h3>Available Seats, click to select:</h3>
+       <div id="seatsList"></div>
+   </div>
+
+<!-- Purchase Tickets Section -->
+<hr>
+<h2>Purchase Tickets</h2>
+<form action="/purchase_ticket" method="POST">
+    <label for="flight_num">Flight Number:</label>
+    <input type="number" id="flight_num" name="flight_num" required><br><br>
+
+    <label for="seat_number">Seat Number:</label>
+    <input type="text" id="seat_number" name="seat_number" required><br><br>
+
+    <h3>Payment Information</h3>
+    <label for="card_type">Card Type:</label>
+    <select id="card_type" name="card_type" required>
+        <option value="">Select Card Type</option>
+        <option value="Credit">Credit</option>
+        <option value="Debit">Debit</option>
+    </select><br><br>
+
+    <label for="card_number">Card Number:</label>
+    <input type="text" id="card_number" name="card_number" required><br><br>
+
+    <label for="name_on_card">Name on Card:</label>
+    <input type="text" id="name_on_card" name="name_on_card" required><br><br>
+
+    <label for="expiration_date">Expiration Date:</label>
+    <input type="text" id="expiration_date" name="expiration_date" required 
+           placeholder="MM/YY"><br><br>
+
+    <label for="security_code">Security Code (CVV):</label>
+    <input type="password" id="security_code" name="security_code" required><br><br>
+
+    <button type="submit">Purchase Ticket</button>
+</form>
+
+   <hr>
+   <!-- Cancel Trip Section -->
+   <h2>Cancel Trip</h2>
+   <form action="/cancel_ticket" method="POST">
+       <label for="ticket_id">Ticket ID to Cancel:</label>
+       <input type="number" id="ticket_id" name="ticket_id" required><br><br>
+       <button type="submit">Cancel Ticket</button>
+   </form>
+
+   <hr>
+   <!-- Rate Flight Section -->
+   <h2>Rate a Flight</h2>
+   {% if flights_to_rate %}
+       <form action="/rate_flight" method="POST">
+           <label for="flight_num">Select a Flight:</label>
+           <select id="flight_num" name="flight_num" required>
+               {% for flight in flights_to_rate %}
+                   <option value="{{ flight.Flight_Num }}">
+                       {{ flight.Flight_Num }} - {{ flight.Departure_Code }} to {{ flight.Arrival_Code }} on {{ flight.Departure_Date }}
+                   </option>
+               {% endfor %}
+           </select><br><br>
+   
+           <label for="rating">Rating (1-5):</label>
+           <input type="number" id="rating" name="rating" min="1" max="5" required><br><br>
+   
+           <label for="comment">Comment (optional):</label>
+           <textarea id="comment" name="comment"></textarea><br><br>
+   
+           <button type="submit">Submit Rating</button>
+       </form>
+   {% else %}
+       <p>No flights available for rating at this time. You have either already rated all your past flights, or have not had any yet...</p>
+   {% endif %}
+
+   <script>
+   // JavaScript to show/hide the return date field
+   document.getElementById("trip_type").addEventListener("change", function() {
+       var returnDateSection = document.getElementById("return_date_section");
+       if (this.value === "round-trip") {
+           returnDateSection.style.display = "block";
+       } else {
+           returnDateSection.style.display = "none";
+       }
+   });
+
+   // Function to check seats
+   function checkSeats() {
+       const flightNum = document.getElementById('flight_num_check').value;
+       if (!flightNum) {
+           alert('Please enter a flight number');
+           return;
+       }
+
+       fetch(`/select_seat/${flightNum}`)
+           .then(response => response.json())
+           .then(data => {
+               if (data.error) {
+                   alert(data.error);
+                   return;
+               }
+
+               const seatsList = document.getElementById('seatsList');
+               seatsList.innerHTML = '';
+
+               const table = document.createElement('table');
+               table.border = '1';
+               
+               const header = table.insertRow();
+               header.innerHTML = '<th>Seat Number</th><th>Status</th><th>Action</th>';
+
+               data.seats.forEach(seat => {
+                   const row = table.insertRow();
+                   const seatCell = row.insertCell(0);
+                   const statusCell = row.insertCell(1);
+                   const actionCell = row.insertCell(2);
+
+                   seatCell.textContent = seat.Seat_Number;
+                   statusCell.textContent = seat.Is_Available ? 'Available' : 'Taken';
+
+                   if (seat.Is_Available) {
+                       const selectButton = document.createElement('button');
+                       selectButton.textContent = 'Select';
+                       selectButton.onclick = function() {
+                           document.getElementById('flight_num').value = flightNum;
+                           document.getElementById('seat_number').value = seat.Seat_Number;
+                       };
+                       actionCell.appendChild(selectButton);
+                   } else {
+                       actionCell.textContent = 'Not Available';
+                   }
+               });
+
+               seatsList.appendChild(table);
+           })
+           .catch(error => {
+               console.error('Error:', error);
+               alert('Error loading seats. Please try again.');
+           });
+   }
+   </script>
+
+    
+    <hr>
+    <hr>
+    <hr>
+<div class="spending-section">
+    <h2>Track My Spending</h2>
+    
+    <!-- Default View -->
+    <div class="spending-summary">
+        <h3>Total Spending in the Last Year</h3>
+        <p class="total-amount">${{ '%.2f' | format(total_spent_last_year) if total_spent_last_year else '0.00' }}</p>
+        
+        <h3>Month-wise Spending (Last 6 Months Note: Displayed ONLY if you made a purchase in that month)</h3>
+        <table class="spending-table">
+            <tr>
+                {% for row in last_6_months_spending %}
+                    <th>{{ row.Month }}</th>
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for row in last_6_months_spending %}
+                    <td>${{ '%.2f' | format(row.Total_Spent) if row.Total_Spent else '0.00' }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+
+    <!-- Range-Based View -->
+    <div class="custom-range">
+        <h3>View Spending for a Date Range</h3>
+        <form action="/track_spending" method="POST">
+            <div class="form-group">
+                <label for="start_date">Start Date:</label>
+                <input type="date" id="start_date" name="start_date" required>
+                <label for="end_date">End Date:</label>
+                <input type="date" id="end_date" name="end_date" required>
+                <button type="submit">View Custom Range</button>
+            </div>
+        </form>
+
+        {% if total_spent_range %}
+        <div class="range-results">
+            <h3>Total Spending from {{ start_date }} to {{ end_date }}</h3>
+            <p class="total-amount">${{ '%.2f' | format(total_spent_range) }}</p>
+
+            <h3>Month-wise Spending in Date Range</h3>
+            <table class="spending-table">
+                <tr>
+                    {% for row in range_month_wise_spending %}
+                        <th>{{ row.Month }}</th>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for row in range_month_wise_spending %}
+                        <td>${{ '%.2f' | format(row.Total_Spent) if row.Total_Spent else '0.00' }}</td>
+                    {% endfor %}
+                </tr>
+            </table>
+        </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>

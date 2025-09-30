@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Status of Flights</title>
+</head>
+<body>
+    <h1>Change Status of Flights for {{ airline_name }}</h1>
+    <a href="/home">Staff Homepage</a>
+
+    <hr>
+
+    <h2>Flights (Change Status of Future Flights)</h2>
+    {% if flights %}
+        <table border="1">
+            <tr>
+                <th>Flight Number</th>
+                <th>Departure Date</th>
+                <th>Departure Time</th>
+                <th>Arrival Date</th>
+                <th>Arrival Time</th>
+                <th>Current Status</th>
+            </tr>
+            {% for flight in flights %}
+            <tr>
+                <td>{{ flight['Flight_Num'] }}</td>
+                <td>{{ flight['Departure_Date'] }}</td>
+                <td>{{ flight['Departure_Time'] }}</td>
+                <td>{{ flight['Arrival_Date'] }}</td>
+                <td>{{ flight['Arrival_Time'] }}</td>
+                <td>{{ flight['Flight_Status'] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    {% else %}
+        <p>No flights were found.</p>
+    {% endif %}
+
+    <hr>
+
+    <h2>Update Flight Status</h2>
+    <form method="POST">
+        <label for="flight_num">Flight Number:</label>
+        <select name="flight_num" id="flight_num" required>
+            <option value="">Select a Flight</option>
+            {% for flight in flights %}
+            <option value="{{ flight['Flight_Num'] }}">
+                {{ flight['Flight_Num'] }}
+            </option>
+            {% endfor %}
+        </select>
+        <br>
+
+        <label for="status">New Status:</label>
+        <select name="status" id="status" required>
+            <option value="">Select Status</option>
+            <option value="On-Time">On-Time</option>
+            <option value="Delayed">Delayed</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+        <br>
+
+        <button type="submit">Update Flight Status</button>
+    </form>
+</body>
+</html>

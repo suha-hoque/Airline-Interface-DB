@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Schedule Maintenance</title>
+</head>
+<body>
+    <h1>Schedule Maintenance for an Airplane</h1>
+    <a href="/home">Staff Homepage</a>
+    <hr>
+
+    <form action="/schedule_maintenance" method="POST">
+        <label for="airplane_id">Airplane ID:</label>
+        <input type="text" name="airplane_id" placeholder="Enter Airplane ID" required><br>
+
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date" required><br>
+
+        <label for="start_time">Start Time:</label>
+        <input type="time" name="start_time" required><br>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date" required><br>
+
+        <label for="end_time">End Time:</label>
+        <input type="time" name="end_time" required><br>
+
+        <input type="submit" value="Schedule Maintenance">
+    </form>
+</body>
+</html>

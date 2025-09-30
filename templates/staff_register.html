@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Registration Page</title>
+</head>
+<body>
+    <h2>Staff Registration</h2>
+    <form action="/staff_registerAuth" method="POST">
+        <label for="username">Username:</label>
+        <input type="text" name="username" placeholder="Username" required /> <br>
+
+        <label for="first_name">First Name:</label>
+        <input type="text" name="first_name" placeholder="First Name" required /> <br>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" name="last_name" placeholder="Last Name" required /> <br>
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" placeholder="Password" required /> <br>
+
+        <label for="date_of_birth">Date of Birth:</label>
+        <input type="date" name="date_of_birth" required /> <br>
+
+        <label for="email">Email:</label>
+        <input type="text" name="email" placeholder="Enter email" required /> <br>
+
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone" placeholder="Enter phone number" required /> <br>
+
+        <label for="airline">Airline:</label>
+        <input type="text" name="airline" placeholder="Enter airline name" required /> <br>
+
+        <input type="submit" value="Register" />
+
+        {% if error %}
+            <p class="error"><strong>Error:</strong> {{ error }}</p>
+        {% endif %}
+    </form>
+    <a href="/">Go back</a>
+</body>
+</html>

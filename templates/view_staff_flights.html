@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Flights</title>
+</head>
+<body>
+    <h1>View Flights</h1>
+    <a href="/home">Staff Homepage</a> 
+    <hr>
+
+    <form action="/view_staff_flights" method="POST">
+        <label for="start_date">Start Date:</label>
+        <input type="date" name="start_date"><br>
+
+        <label for="end_date">End Date:</label>
+        <input type="date" name="end_date"><br>
+
+        <label for="source">Source Airport:</label>
+        <input type="text" name="source"><br>
+
+        <label for="destination">Destination Airport:</label>
+        <input type="text" name="destination"><br>
+
+        <input type="submit" value="Filter Flights">
+    </form>
+    <hr>
+
+
+    <h3>Flights</h3>
+    {% if flights %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Flight Number</th>
+                    <th>Departure Date</th>
+                    <th>Departure Time</th>
+                    <th>Arrival Date</th>
+                    <th>Arrival Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for flight in flights %}
+                <tr>
+                    <td>{{ flight['Flight_Num'] }}</td>
+                    <td>{{ flight['Departure_Date'] }}</td>
+                    <td>{{ flight['Departure_Time'] }}</td>
+                    <td>{{ flight['Arrival_Date'] }}</td>
+                    <td>{{ flight['Arrival_Time'] }}</td>
+                    <td>{{ flight['Flight_Status'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No flights found.</p>
+    {% endif %}
+
+    <hr>
+    
+   
+    <h3>Flights and the Customers for each Flight.</h3>
+    {% if customers %}
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Flight Number</th>
+                    <th>Departure Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td>{{ customer['Email'] }}</td>
+                    <td>{{ customer['First_Name'] }}</td>
+                    <td>{{ customer['Last_Name'] }}</td>
+                    <td>{{ customer['Flight_Num'] }}</td>
+                    <td>{{ customer['Departure_Date'] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No customers found in these flights.</p>
+    {% endif %}
+</body>
+</html>
